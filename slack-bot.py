@@ -102,6 +102,8 @@ while option != "0":
 
         tasks["tasks"][index]["complete"] = True
 
+        saveTaskList()
+
     if option == "3":
 
         channel = input("\n\nEnter channel name: ")
