@@ -9,8 +9,8 @@ task_file = ".tasks"
 token = None
 tasks = {"tasks": []}
 
-incompleteIcon = "https://as1.ftcdn.net/jpg/01/29/11/32/500_F_129113243_JHc6iRj7TmeEOaB2CK7YXFkD5PUpE4fN.jpg"
-completeIcon = "https://t3.ftcdn.net/jpg/01/29/11/32/240_F_129113249_oGxjEE4PPBpt8RtUFEZNgf4soRctzq2d.jpg"
+incompleteIcon = "https://github.com/amit08255/slack-tasklist/raw/master/assets/checked0.png"
+completeIcon = "https://github.com/amit08255/slack-tasklist/raw/master/assets/checked.png"
 
 def upload2Slack(channel, message, taskList):
 
@@ -19,7 +19,7 @@ def upload2Slack(channel, message, taskList):
 
     headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}
 
-    payload = {"channel":channel,"as_user":True,"blocks":[{"type":"section","text":{"type":"plain_text","emoji":True,"text":message}},{"type":"divider"},{"type":"section","text":{"type":"mrkdwn","text":"Today's task list:"}}]}
+    payload = {"channel":channel,"as_user":True,"blocks":[{"type":"section","text":{"type":"plain_text","emoji":True,"text":message}},{"type":"divider"}]}
 
     for i in range(0, len(taskList), 1):
 
@@ -29,11 +29,6 @@ def upload2Slack(channel, message, taskList):
             icon = completeIcon
 
         payload["blocks"].append({"type":"context","elements":[{"type":"image","image_url":icon,"alt_text":"task icon"},{"type":"mrkdwn","text":"*"+taskList[i]["title"]+"*"}]})
-
-    payload["blocks"].append({"type":"divider"})
-
-    payload["blocks"].append({"type":"context","elements":[{"type":"mrkdwn","text":":pushpin: The task list is sorted according to priority."}]})
-            
 
     response = requests.request("POST", url, headers=headers, data = json.dumps(payload))
     
@@ -75,6 +70,7 @@ menu = '''
 2. Complete task
 3. Status update on slack
 4. List tasks
+5. Clear completed tasks
 0. Exit
 '''
 
@@ -124,5 +120,18 @@ while option != "0":
 
             print(tasks["tasks"][i]["title"])
             print("Completed: ", tasks["tasks"][i]["complete"], "\n")
+
+    if option == "5":
+
+        i = 0
+
+        while i < len(tasks["tasks"]):
+
+            if tasks["tasks"][i]["complete"] == True:
+                del tasks["tasks"][i]
+            else:
+                i = i+1
+
+        saveTaskList()
 
     print(menu)
