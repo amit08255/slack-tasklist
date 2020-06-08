@@ -131,6 +131,7 @@ menu = '''
 4. List tasks
 5. Clear completed tasks
 6. Update last message
+7. Delete a task
 0. Exit
 '''
 
@@ -202,5 +203,17 @@ while option != "0":
         message = message.strip()
 
         updateSlackLastMessage(message, tasks["tasks"])   
+
+    if option == "7":
+
+        for i in range(0, len(tasks["tasks"]), 1):
+            print("\n"+str(i)+".", tasks["tasks"][i]["title"])
+
+        index = input("\n\nEnter task index: ")
+        index = int(index.strip())
+
+        del tasks["tasks"][index]
+
+        saveTaskList()
 
     print(menu)
