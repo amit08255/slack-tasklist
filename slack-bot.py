@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import platform
 
 url = "https://slack.com/api/chat.postMessage"
 update_url = "https://slack.com/api/chat.update"
@@ -13,6 +14,15 @@ tasks = {"tasks": []}
 
 incompleteIcon = "https://github.com/amit08255/slack-tasklist/raw/master/assets/checked0.png"
 completeIcon = "https://github.com/amit08255/slack-tasklist/raw/master/assets/checked.png"
+
+
+def clearScreen():
+
+    if platform.system() == 'Linux':
+        os.system("clear")
+    else:
+        os.system("cls")
+
 
 def saveMessageHistory(response):
     fout = open(message_history_file, "w")
@@ -137,6 +147,7 @@ menu = '''
 
 option = ""
 
+clearScreen()
 print(menu)
 
 while option != "0":
@@ -173,7 +184,9 @@ while option != "0":
         message = input("\n\nEnter message: ")
         message = message.strip()
 
-        upload2Slack(channel, message, tasks["tasks"])        
+        upload2Slack(channel, message, tasks["tasks"])  
+
+        input("\n\nPress enter to continue...")      
 
     if option == "4":
 
@@ -183,6 +196,8 @@ while option != "0":
 
             print(tasks["tasks"][i]["title"])
             print("Completed: ", tasks["tasks"][i]["complete"], "\n")
+
+        input("\n\nPress enter to continue...")
 
     if option == "5":
 
@@ -204,6 +219,8 @@ while option != "0":
 
         updateSlackLastMessage(message, tasks["tasks"])   
 
+        input("\n\nPress enter to continue...")
+
     if option == "7":
 
         for i in range(0, len(tasks["tasks"]), 1):
@@ -216,4 +233,5 @@ while option != "0":
 
         saveTaskList()
 
+    clearScreen()
     print(menu)
