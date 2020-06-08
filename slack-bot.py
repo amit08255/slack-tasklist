@@ -47,6 +47,10 @@ def upload2Slack(channel, message, taskList):
 
         payload["blocks"].append({"type":"context","elements":[{"type":"image","image_url":icon,"alt_text":"task icon"},{"type":"mrkdwn","text":"*"+taskList[i]["title"]+"*"}]})
 
+    payload["blocks"].append({"type":"divider"})
+
+    payload["blocks"].append({"type":"context","elements":[{"type":"mrkdwn","text":":pushpin: The task list is sorted according to priority."}]})
+
     response = requests.request("POST", url, headers=headers, data = json.dumps(payload))
 
     saveMessageHistory(response.text)
@@ -98,6 +102,11 @@ def updateSlackLastMessage(message, taskList):
             icon = completeIcon
 
         payload["blocks"].append({"type":"context","elements":[{"type":"image","image_url":icon,"alt_text":"task icon"},{"type":"mrkdwn","text":"*"+taskList[i]["title"]+"*"}]})
+
+    payload["blocks"].append({"type":"divider"})
+
+    payload["blocks"].append({"type":"context","elements":[{"type":"mrkdwn","text":":pushpin: The task list is sorted according to priority."}]})
+
 
     response = requests.request("POST", update_url, headers=headers, data = json.dumps(payload))
 
